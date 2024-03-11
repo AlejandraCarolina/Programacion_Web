@@ -1,14 +1,30 @@
 <?php
+
+
+
+
 include 'db.php';
 
 if (isset($_GET['id'])) {
     $id_alumno = $_GET['id'];
+
+
+   
+    
 
     // Consulta para obtener el nombre del alumno
     $sql_nombre_alumno = "SELECT nombre FROM alumnos WHERE id = $id_alumno";
     $result_nombre_alumno = $conn->query($sql_nombre_alumno);
     $row_nombre_alumno = $result_nombre_alumno->fetch_assoc();
     $nombre_alumno = $row_nombre_alumno['nombre'];
+
+    header("Pragma: public");
+    header("Expires: 0");
+    $filename = "Calificaciones".$nombre_alumno.".xls";
+    header("Content-type: application/vnd.ms-excel");
+    header("Content-Disposition: attachment; filename=$filename");
+    header("Pragma: no-cache");
+    header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 
     // Consulta para obtener las calificaciones del alumno
     $sql_calificaciones = "SELECT materias.nombre AS materia, calificaciones.u1, calificaciones.u2, calificaciones.u3, calificaciones.promedio
@@ -58,38 +74,6 @@ if (isset($_GET['id'])) {
 <body>
 
 <!-- nav bar en  bootstrap-->
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="index.php">Index</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listado_alumnos.php">Listado alumnos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listado_carreras.php">Listado carreras</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listado_materias.php">Listado materias</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="asignar_materia_alumno.php">Asignar Materia Alumno</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="asignar_materia_carrera.php">Asignar Materia Carrera</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="calificaciones.php">Calificaciones</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
     <div class="container mt-5">
         <h2>Calificaciones de <?= $nombre_alumno ?></h2>
         <table class="table">
@@ -111,9 +95,7 @@ if (isset($_GET['id'])) {
                 </tr>
                 <?php endwhile; ?>
             </tbody>
-        </table>
-        <a href="listado_alumnos.php" class="btn btn-primary">Regresar</a>
-        <a href="exportar_calificaciones.php?id=<?= $id_alumno ?>" class="btn btn-success">Exportar a Excel</a>
+                </table>
     </div>
 </body>
 </html>

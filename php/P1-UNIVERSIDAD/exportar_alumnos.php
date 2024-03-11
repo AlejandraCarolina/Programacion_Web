@@ -1,5 +1,12 @@
 <?php
 
+header("Pragma: public");
+header("Expires: 0");
+$filename = "ListadoAlumnos.xls";
+header("Content-type: application/vnd.ms-excel");
+header("Content-Disposition: attachment; filename=$filename");
+header("Pragma: no-cache");
+header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
 // Conexión a la base de datos
 include 'db.php';
 
@@ -47,39 +54,6 @@ $result = $conn->query($sql);
   </style>
     </head>
     <body>
-                    <!-- nav bar -->
-<nav class="navbar navbar-expand-lg navbar-light">
-    <div class="container">
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav">
-          <li class="nav-item">
-            <a class="nav-link" href="index.php">Index</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listado_alumnos.php">Listado alumnos</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listado_carreras.php">Listado carreras</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="listado_materias.php">Listado materias</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="asignar_materia_alumno.php">Asignar Materia Alumno</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="asignar_materia_carrera.php">Asignar Materia Carrera</a>
-          </li>
-          <li class="nav-item">
-            <a class="nav-link" href="calificaciones.php">Calificaciones</a>
-          </li>
-        </ul>
-      </div>
-    </div>
-  </nav>
         <div class="container mt-5">
             <h2> Listado de Alumnos</h2>
             <table class="table">
@@ -90,7 +64,6 @@ $result = $conn->query($sql);
                     <th>Edad</th>
                     <th>Email</th>
                     <th>Carrera</th>
-                    <th>Accion</th>
                 </thead>
                 <tbody>
                     <?php 
@@ -106,17 +79,14 @@ $result = $conn->query($sql);
                     <td><?php echo $row['email'];?></td>
                     <td><?php echo $row['carrera_nombre'];?></td>
                     <td>
-                            <a href="editar_alumno.php?id=<?= $row['id']?>" class="btn btn-primary">Editar</a>
-                            <a href="crud.php?eliminar_alumno=<?= $row['id']?>" class="btn btn-danger">Eliminar</a>
-                            <a href="ver_calificaciones.php?id=<?= $row['id']; ?>" class="btn btn-secondary">Ver calificaciones</a>
+            
                     </td>
                     </tr>
                     <?php } ?>
 
                 </tbody>
             </table>
-            <a href="alta_alumno.php" class="btn btn-success">Agregar Alumno</a>
-            <a href="exportar_alumnos.php" class="btn btn-info">Exportar a Excel</a>
+      
             <br>
             <br>
            

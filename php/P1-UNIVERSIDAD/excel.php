@@ -2,6 +2,11 @@
 // Conexión a la base de datos
 include 'db.php';
 
+require 'vendor/autoload.php'; // Incluye el autoloader de Composer
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xls;
+
 // Función para exportar a XLS
 function exportToXLS($filename, $data) {
     header('Content-Type: application/vnd.ms-excel');

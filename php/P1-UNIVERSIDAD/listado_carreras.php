@@ -112,11 +112,9 @@
                 </tbody>
             </table>
             <a href="alta_carrera.php" class="btn btn-success">Agregar Carrera</a>
+            <a href="exportar_carreras.php" class="btn btn-info">Exportar a XLS</a>
             <br>
             <br>
-            <form action="" method="POST">
-            <input type="submit" name="export_alumnos" value="Exportar a XLS" class="btn btn-success">
-        </form>
         </div>
     </body>
 </html>
