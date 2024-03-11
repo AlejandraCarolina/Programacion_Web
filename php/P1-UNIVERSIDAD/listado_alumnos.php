@@ -1,22 +1,19 @@
 <?php
+
 // Conexión a la base de datos
 include 'db.php';
 
 // Consulta SQL para obtener todos los registros de la tabla alumnos
-$sql = 'SELECT alumnos.id, alumnos.matricula, alumnos.nombre, alumnos.edad, alumnos.email, carrera.nombre as carrera_nombre FROM alumnos INNER JOIN carrera ON alumnos.id_carrera = carrera.id_carrera';
+$sql = 'SELECT alumnos.id, alumnos.matricula, alumnos.nombre, alumnos.edad, alumnos.email, 
+carrera.nombre as carrera_nombre FROM alumnos INNER JOIN carrera ON alumnos.id_carrera = carrera.id_carrera';
 $result = $conn->query($sql);
 ?>
 
-<!DOCTYPE html>
 <html lang="es">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listado de Alumnos</title>
-    <!-- Incluye la biblioteca Bootstrap -->
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-
-    <style>
+    <head>
+        <title>Listado de Alumnos</title>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
+        <style>
     body {
       font-family: Arial, sans-serif;
       margin: 0;
@@ -46,11 +43,10 @@ $result = $conn->query($sql);
       padding: 20px;
     }
 
-    /* Estilos adicionales según tus preferencias */
   </style>
-</head>
-<body>
-<!-- nav bar en  bootstrap-->
+    </head>
+    <body>
+                    <!-- nav bar en  bootstrap-->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -58,7 +54,7 @@ $result = $conn->query($sql);
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-        <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="index.php">Index</a>
           </li>
           <li class="nav-item">
@@ -83,47 +79,48 @@ $result = $conn->query($sql);
       </div>
     </div>
   </nav>
-    <div class="container mt-5">
-        <h2>Listado de Alumnos</h2>
-        <table class="table">
-            <thead>
-                <th>ID Alumno</th>
-                <th>Matrícula</th>
-                <th>Nombre</th>
-                <th>Edad</th>
-                <th>Email</th>
-                <th>Carrera</th>
-                <th>Acción</th>
-            </thead>
-            <tbody>
-                <?php while ($row = $result->fetch_assoc()): ?>
-                    <tr>
-                        <td><?php echo $row['id']; ?></td>
-                        <td><?php echo $row['matricula']; ?></td>
-                        <td><?php echo $row['nombre']; ?></td>
-                        <td><?php echo $row['edad']; ?></td>
-                        <td><?php echo $row['email']; ?></td>
-                        <td><?php echo $row['carrera_nombre']; ?></td>
-                        <td>
-                            <a href="editar_alumno.php?id=<?= $row['id'] ?>" class="btn btn-primary">Editar</a>
-                            <a href="crud.php?eliminar_alumno=<?= $row['id'] ?>" class="btn btn-danger">Eliminar</a>
-                        </td>
-                    </tr>
-                <?php endwhile; ?>
-            </tbody>
-        </table>
-        <a href="alta_alumno.php" class="btn btn-success">Agregar Alumno</a>
-        <br>
-        <br>
-        <form action="" method="POST">
-            <input type="submit" name="export_alumnos" value="Exportar a XLS" class="btn btn-success">
-        </form>
-    </div>
+        <div class="container mt-5">
+            <h2> Listado de Alumnos</h2>
+            <table class="table">
+                <thead>
+                    <th>ID Alumno</th>
+                    <th>Matrícula</th>
+                    <th>Nombre</th>
+                    <th>Edad</th>
+                    <th>Email</th>
+                    <th>Carrera</th>
+                    <th>Accion</th>
+                </thead>
+                <tbody>
+                    <?php 
 
-    <!-- Incluye la biblioteca jQuery y Popper.js (necesarios para Bootstrap) -->
-    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
-    <!-- Incluye la biblioteca Bootstrap JS -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
-</body>
+                        // Recorrido en la tabla de carreras para obtener los registros
+                        while ($row = $result->fetch_assoc()){ 
+                    ?>
+                    <tr>
+                    <td><?php echo $row['id']; ?></td>
+                    <td><?php echo $row['matricula'];?></td>
+                    <td><?php echo $row['nombre'];?></td>
+                    <td><?php echo $row['edad'];?></td>
+                    <td><?php echo $row['email'];?></td>
+                    <td><?php echo $row['carrera_nombre'];?></td>
+                    <td>
+                            <a href="editar_alumno.php?id=<?= $row['id']?>" class="btn btn-primary">Editar</a>
+                            <a href="crud.php?eliminar_alumno=<?= $row['id']?>" class="btn btn-danger">Eliminar</a>
+                            <a href="ver_calificaciones.php?id=<?= $row['id']; ?>" class="btn btn-secondary">Ver calificaciones</a>
+                    </td>
+                    </tr>
+                    <?php } ?>
+
+                </tbody>
+            </table>
+            <a href="alta_alumno.php" class="btn btn-success">Agregar Alumno</a>
+            <br>
+            <br>
+            <form action="" method="POST">
+            <input type="submit" name="export_alumnos" value="Exportar a XLS" class="btn btn-Secondary">
+        </form>
+
+        </div>
+    </body>
 </html>

@@ -1,7 +1,9 @@
-
 <?php
     //integramos el archivo de conexión a la base de datos
     include 'db.php';
+
+   
+
     //hacemos la consulta para obtener los registros de la tabla carreras
     $sql = "SELECT * FROM carrera";
     $result = $conn->query($sql);
@@ -11,7 +13,6 @@
     <head>
         <title>Listado de Carreras</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
-
         <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,11 +43,10 @@
       padding: 20px;
     }
 
-    /* Estilos adicionales según tus preferencias */
   </style>
     </head>
     <body>
-        <!-- nav bar en  bootstrap-->
+                    <!-- nav bar en  bootstrap-->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -54,10 +54,7 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
-        <li class="nav-item">
-            <a class="nav-link" href="index.php">Index</a>
-          </li>
-        <li class="nav-item">
+          <li class="nav-item">
             <a class="nav-link" href="index.php">Index</a>
           </li>
           <li class="nav-item">
@@ -96,7 +93,6 @@
                 <tbody>
                     <?php
                         while($row = $result->fetch_assoc()){
-
                     ?>
                     <tr>
                         <td><?php echo $row['id_carrera']; ?></td>
@@ -104,7 +100,7 @@
                         <td>
                             <!-- el get se representa con el signo de "?" y el nombre de la variable-->
                             <a href="editar_carrera.php?id_carrera=<?php echo $row['id_carrera']; ?>" class="btn btn-primary">Editar</a>
-                            <form class="d-inline" action="crud.php?eliminar_carrera=<?php $row['id_carrera']?>" method="POST">
+                            <form class="d-inline" action="crud.php" method="POST">
                                 <input type="hidden" name="id_carrera" value="<?php echo $row['id_carrera']; ?>">
                                 <button type="submit" class="btn btn-danger" name="eliminar_carrera">Eliminar</button>
                             </form>

@@ -11,7 +11,7 @@
         font-family: Arial, sans-serif;
         margin: 0;
         padding: 0;
-        background: linear-gradient(to bottom, #976fd8, #DBC9F5); /* Fondo con gradiente */
+        background: linear-gradient(to bottom, #b292e6, #DBC9F5); /* Fondo con gradiente */
         height: 100vh;
         display: flex;
         justify-content: center;
@@ -26,7 +26,7 @@
     }
 
     .navbar {
-        background-color: #f8d7da; /* Rosa pastel más claro */
+        background-color: #F9D3E3; /* Rosa pastel más claro */
         position: fixed; /* Ajuste para que el navbar se quede en la parte superior */
         width: 100%; /* Hace que el navbar ocupe el ancho completo */
         top: 0; /* Lo coloca en la parte superior de la página */
@@ -44,7 +44,7 @@
         padding: 20px;
         margin-top: 70px; /* Ajuste para evitar que el contenido se oculte detrás del navbar */
     }
-    /* Estilos adicionales según tus preferencias */
+  
 </style>
 
 </head>

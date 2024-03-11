@@ -1,4 +1,3 @@
-
 <?php
     //integramos el archivo de conexión a la base de datos
     include 'db.php';
@@ -11,7 +10,6 @@
     <head>
         <title>Listado de Materias</title>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.5.3/dist/css/bootstrap.min.css">
-
         <style>
     body {
       font-family: Arial, sans-serif;
@@ -42,12 +40,10 @@
       padding: 20px;
     }
 
-    /* Estilos adicionales según tus preferencias */
   </style>
     </head>
     <body>
-
-    <!-- nav bar en  bootstrap-->
+                    <!-- nav bar en  bootstrap-->
 <nav class="navbar navbar-expand-lg navbar-light">
     <div class="container">
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -55,6 +51,9 @@
       </button>
       <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav">
+          <li class="nav-item">
+            <a class="nav-link" href="index.php">Index</a>
+          </li>
           <li class="nav-item">
             <a class="nav-link" href="listado_alumnos.php">Listado alumnos</a>
           </li>
@@ -77,7 +76,6 @@
       </div>
     </div>
   </nav>
-        
         <div class="container mt-5">
             <h2>Listado de Materias</h2>
             <table class="table">
@@ -99,8 +97,8 @@
                         <td>
                             <!-- el get se representa con el signo de "?" y el nombre de la variable-->
                             <a href="editar_materia.php?id_materia=<?=$row['id_materia']?>" class="btn btn-primary">Editar</a>
-                            <form class="d-inline" action="crud.php?eliminar_materia=<?php $row['id_materia']?>" method="POST">
-                                <input type="hidden" name="id_materia" value="<?=$row['id_materia']?>">
+                            <form class="d-inline" action="crud.php?eliminar_materia=<?= $row['id_materia'] ?>" method="POST">
+                                <input type="hidden" name="id_materia" value="<?= $row['id_materia'] ?>">
                                 <button type="submit" class="btn btn-danger" name="eliminar_materia">Eliminar</button>
                             </form>
                             <a href="asignar_materia_carrera.php" class="btn btn-secondary">Asignar Materia a Carrera</button>

@@ -19,15 +19,41 @@ include 'db.php';
         header("Location: listado_alumnos.php");
     }
 
-// Baja de alumnos
+// Verificar si se ha enviado el ID del alumno por GET para eliminarlo
+if(isset($_GET['eliminar_alumno'])) {
+    $id_alumno = $_GET['eliminar_alumno'];
 
-    if(isset($_GET['eliminar_alumno'])){
-        $id = $_GET['eliminar_alumnos'];
-        
-        $sql = "DELETE FROM alumnos WHERE id=$id";
-        $result = $conn->query($sql);
-        header("Location: listado_alumnos.php");
+    // Eliminar las relaciones del alumno con las materias en la tabla alumnos_materias
+    $sql_delete_alumnos_materias = "DELETE FROM alumnos_materias WHERE id_alumno = $id_alumno";
+    $result_delete_alumnos_materias = $conn->query($sql_delete_alumnos_materias);
+
+    if (!$result_delete_alumnos_materias) {
+        // Manejo de error si la eliminación falla
+        echo "Error al eliminar las relaciones del alumno con las materias: " . $conn->error;
     }
+
+    // Eliminar las calificaciones del alumno en la tabla calificaciones
+    $sql_delete_calificaciones = "DELETE FROM calificaciones WHERE id_alumno = $id_alumno";
+    $result_delete_calificaciones = $conn->query($sql_delete_calificaciones);
+
+    if (!$result_delete_calificaciones) {
+        // Manejo de error si la eliminación falla
+        echo "Error al eliminar las calificaciones del alumno: " . $conn->error;
+    }
+
+    // Finalmente, eliminar el registro del alumno en la tabla alumnos
+    $sql_delete_alumno = "DELETE FROM alumnos WHERE id = $id_alumno";
+    $result_delete_alumno = $conn->query($sql_delete_alumno);
+
+    if (!$result_delete_alumno) {
+        // Manejo de error si la eliminación falla
+        echo "Error al eliminar el registro del alumno: " . $conn->error;
+    } else {
+        // Redireccionar de regreso a listado_alumnos.php después de eliminar
+        header("Location: listado_alumnos.php");
+        exit();
+    }
+}
 
 //Cambios de alumnos
 
@@ -81,6 +107,26 @@ include 'db.php';
         header("Location: listado_carreras.php");
     }
 
+    // Verificar si se ha enviado el formulario para eliminar una carrera
+    if(isset($_POST['eliminar_carrera'])) {
+        $id_carrera = $_POST['id_carrera'];
+
+        // Eliminar las relaciones en la tabla materia_carrera
+        $sql_delete_materia_carrera = "DELETE FROM materia_carrera WHERE id_carrera = $id_carrera";
+        $result_delete_materia_carrera = $conn->query($sql_delete_materia_carrera);
+
+        if (!$result_delete_materia_carrera) {
+            // Manejo de error si falla la eliminación de relaciones
+            echo "Error al eliminar las relaciones de la carrera: " . $conn->error;
+        }
+
+        // Después de eliminar las relaciones, eliminar la carrera de la base de datos
+        $sql_delete_carrera = "DELETE FROM carrera WHERE id_carrera = $id_carrera";
+        $result_delete_carrera = $conn->query($sql_delete_carrera);
+
+        header("Location: listado_carreras.php");
+
+    }
 //Alta de materia
 
 if(isset($_POST['alta_materia'])){
@@ -106,6 +152,54 @@ if(isset($_POST['cambio_materia'])){
     header("Location: listado_materias.php");
 }
 
+    // Verificar si se ha enviado el ID de la materia a eliminar
+    if(isset($_GET['eliminar_materia'])) {
+        $id_materia = $_GET['eliminar_materia'];
+
+        // Eliminar las relaciones de la materia con las carreras en la tabla materia_carrera
+        $sql_delete_materia_carrera = "DELETE FROM materia_carrera WHERE id_materia = ?";
+        
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql_delete_materia_carrera);
+        
+        // Vincular el parámetro
+        $stmt->bind_param("i", $id_materia);
+        
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            // La eliminación fue exitosa
+            echo "Relaciones de la materia con las carreras eliminadas correctamente.";
+        } else {
+            // No se eliminaron registros, probablemente porque no había relaciones
+            echo "No se encontraron relaciones de la materia con las carreras para eliminar.";
+        }
+
+        // Finalmente, eliminar el registro de la materia en la tabla materias
+        $sql_delete_materia = "DELETE FROM materias WHERE id_materia = ?";
+        
+        // Preparar la consulta
+        $stmt = $conn->prepare($sql_delete_materia);
+        
+        // Vincular el parámetro
+        $stmt->bind_param("i", $id_materia);
+        
+        // Ejecutar la consulta
+        $stmt->execute();
+
+        if ($stmt->affected_rows > 0) {
+            // La eliminación fue exitosa
+            echo "Materia eliminada correctamente.";
+        } else {
+            // No se eliminó el registro, probablemente porque no existía
+            echo "No se encontró la materia a eliminar.";
+        }
+
+        // Redireccionar de regreso a listado_materias.php después de eliminar
+        header("Location: listado_materias.php");
+        exit();
+    }
 
 //Asignar materia a carrera
 if(isset($_POST['alta_materia_carrera'])){
@@ -129,7 +223,7 @@ if(isset($_POST['alta_materia_carrera'])){
 
 // Asignar materias a alumno
 if(isset($_POST['asignar_materias_alumno'])){
-    $id_alumno = $_POST['id_alumno']; // ID del alumno seleccionado
+    $id_alumno = $_POST['id']; // ID del alumno seleccionado
     $materias = $_POST['materias']; // Array con los IDs de las materias seleccionadas
 
     // Verificar que el ID del alumno sea válido
@@ -154,3 +248,78 @@ if(isset($_POST['asignar_materias_alumno'])){
         echo "ID de alumno no válido.";
     }
 }   
+
+// Verificar si se ha enviado el formulario
+if (isset($_POST['guardar_calificaciones'])) {
+    // Obtener el id_alumno de la URL
+    $id_alumno = $_GET['id'];
+
+    // Recorrer todas las calificaciones enviadas por el formulario
+    foreach ($_POST as $key => $value) {
+        // Verificar si el nombre del input corresponde al formato de calificaciones
+        if (preg_match('/calif_(\d+)-(\d+)/', $key, $matches)) {
+            $id_materia = $matches[1]; // Obtener el ID de la materia
+            $unidad = $matches[2]; // Obtener el número de unidad
+            $calificacion = $value; // Obtener la calificación
+
+            // Verificar si ya existe una fila para esta combinación de alumno y materia
+            $sql_check_exists = "SELECT * FROM calificaciones WHERE id_alumno = $id_alumno AND id_materia = $id_materia";
+            $result_check_exists = $conn->query($sql_check_exists);
+
+            if ($result_check_exists->num_rows > 0) {
+                // Si ya existe una fila, actualizamos la calificación
+                $sql_update_calificacion = "UPDATE calificaciones 
+                                            SET u$unidad = '$calificacion' 
+                                            WHERE id_alumno = $id_alumno AND id_materia = $id_materia";
+
+                $result_update = $conn->query($sql_update_calificacion);
+                if (!$result_update) {
+                    // Manejo de error si la actualización falla
+                    echo "Error al actualizar las calificaciones: " . $conn->error;
+                }
+            } else {
+                // Si no existe una fila, insertamos una nueva fila para la calificación
+                $sql_insert_calificacion = "INSERT INTO calificaciones (id_alumno, id_materia, u$unidad, promedio) 
+                                            VALUES ($id_alumno, $id_materia, 0, 0)";
+
+                $result_insert = $conn->query($sql_insert_calificacion);
+                if (!$result_insert) {
+                    // Manejo de error si la inserción falla
+                    echo "Error al insertar las calificaciones: " . $conn->error;
+                }
+            }
+        }
+    }
+
+    // Calcular los promedios y actualizarlos en la tabla calificaciones
+    $sql_materias = "SELECT id_materia FROM calificaciones WHERE id_alumno = $id_alumno";
+    $result_materias = $conn->query($sql_materias);
+
+    while ($row_materia = $result_materias->fetch_assoc()) {
+        $id_materia = $row_materia['id_materia'];
+
+        $sql_calificaciones = "SELECT u1, u2, u3 FROM calificaciones WHERE id_alumno = $id_alumno AND id_materia = $id_materia";
+        $result_calificaciones = $conn->query($sql_calificaciones);
+        $row_calificaciones = $result_calificaciones->fetch_assoc();
+
+        $calif_u1 = $row_calificaciones['u1'];
+        $calif_u2 = $row_calificaciones['u2'];
+        $calif_u3 = $row_calificaciones['u3'];
+
+        $promedio = ($calif_u1 + $calif_u2 + $calif_u3) / 3;
+
+        $sql_update_promedio = "UPDATE calificaciones 
+                                SET promedio = $promedio 
+                                WHERE id_alumno = $id_alumno AND id_materia = $id_materia";
+
+        $result_update_promedio = $conn->query($sql_update_promedio);
+        if (!$result_update_promedio) {
+            // Manejo de error si la actualización del promedio falla
+            echo "Error al actualizar el promedio: " . $conn->error;
+        }
+    }
+
+    // Redireccionar de regreso a guardar_calificaciones.php después de guardar
+    header("Location: calificaciones.php?id=$id_alumno");
+    exit();
+}
