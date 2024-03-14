@@ -62,9 +62,6 @@
         $query = "INSERT INTO servicios(nombre, costo) VALUES ('$nombre', '$costo')";
         $result = $conn->query($query);
 
-    if(!$result){
-        die("No puede eliminarse");
-    }
 
     header('Location: listado_servicio.php');
 
@@ -77,9 +74,6 @@
         $query = "DELETE FROM servicios WHERE id_servicios = $id_servicio";
         $result = $conn->query($query);
 
-    if(!$result){
-        die("No puede eliminarse");
-    }
 
     header('Location:listado_servicio.php');
 
@@ -94,9 +88,7 @@
         $query = "UPDATE servicios SET nombre = '$nombre', costo = '$costo' WHERE id_servicios = $id_servicios";
         $result = $conn->query($query);
 
-    if(!$result){
-        die("No puede eliminarse");
-    }
+
 
     header('Location: listado_servicio.php');
 }
@@ -111,10 +103,6 @@
         $query = "INSERT INTO taller(fecha_ingreso, id_servicio, id_vehiculo) VALUES ('$fecha', '$id_servicio', '$id_vehiculo')";
         $result = $conn->query($query);
 
-        if(!$result){
-            die("No puede eliminarse");
-    }
-
     header('Location:listado_taller.php');
 
 }
@@ -125,10 +113,6 @@
 
          $query = "DELETE FROM taller WHERE id_taller = $id_taller";
         $result = $conn->query($query);
-
-    if(!$result){
-        die("No puede eliminarse");
-    }
 
     header('Location:listado_taller.php');
 
@@ -143,11 +127,6 @@
 
         $query = "UPDATE taller SET fecha_ingreso = '$fecha', id_servicio = '$id_servicio', id_vehiculo = '$id_vehiculo' WHERE id_taller = $id_taller";
         $result = $conn->query($query);
-
-    if(!$result){
-        echo $query;
-        die("No puede eliminarse");
-    }
 
     header('Location:listado_taller.php');
 }
