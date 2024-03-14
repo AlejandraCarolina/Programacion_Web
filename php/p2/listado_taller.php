@@ -72,7 +72,7 @@
                 ?>
             </tbody>
         </table>
-        <a href="alta_taller.php" class="btn btn-primary">Agregar a Taller</a>
+        <a href="alta_taller.php" class="btn btn-primary">Entrar al taller</a>
         <a href="index.php" class="btn btn-info">Regresar</a>
     </div>
     <script>
