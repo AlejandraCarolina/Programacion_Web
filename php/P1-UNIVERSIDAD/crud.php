@@ -223,7 +223,7 @@ if(isset($_POST['alta_materia_carrera'])){
 
 // Asignar materias a alumno
 if(isset($_POST['asignar_materias_alumno'])){
-    $id_alumno = $_POST['id']; // ID del alumno seleccionado
+    $id_alumno = $_POST['id_alumno']; // ID del alumno seleccionado
     $materias = $_POST['materias']; // Array con los IDs de las materias seleccionadas
 
     // Verificar que el ID del alumno sea válido
