@@ -98,10 +98,16 @@
     if(isset($_POST['alta_taller'])){
         $fecha = $_POST['fecha'];
         $id_servicio = $_POST['id_servicio'];
-        $id_vehiculo = $_POST['id'];
+        $id_vehiculo = $_POST['id_vehiculo'];
 
-        $query = "INSERT INTO taller(fecha_ingreso, id_servicio, id_vehiculo) VALUES ('$fecha', '$id_servicio', '$id_vehiculo')";
+        $check = $conn->query("SELECT * FROM servicios WHERE id_servicios = $id_servicio");
+        $row = $check->fetch_assoc();
+
+        $query = "INSERT INTO taller(fecha_ingreso, id_servicio, id_vehiculo, total, servicio) VALUES ('$fecha', '$id_servicio', '$id_vehiculo'
+        , '".$row['costo']."', '".$row['nombre']."')";
         $result = $conn->query($query);
+
+     
 
     header('Location:listado_taller.php');
 
